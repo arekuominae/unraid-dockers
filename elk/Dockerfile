@@ -69,7 +69,7 @@ RUN /home/pre_init_elk.sh
 
 # Initialize elk on boot
 RUN mkdir -p /etc/my_init.d
-ADD init_tor.sh /etc/my_init.d/init_elk.sh
+ADD init_elk.sh /etc/my_init.d/init_elk.sh
 RUN chmod +x /etc/my_init.d/init_elk.sh
 
 #Start elk when container starts
