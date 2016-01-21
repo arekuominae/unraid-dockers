@@ -80,5 +80,5 @@ RUN chmod +x /etc/service/elk/run
 
 VOLUME /config
 
-# 9200=elasticsearch, 3333,3334=logstash tcp input, 5601=kibana
-EXPOSE 9200 3333 3334 5601
+# 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog utp input
+EXPOSE 5601 9200 3333 3334 514
