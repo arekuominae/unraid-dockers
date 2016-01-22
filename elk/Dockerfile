@@ -2,7 +2,10 @@ FROM phusion/baseimage:0.9.16
 MAINTAINER codechimp-org
 
 # Set correct environment variables
-ENV DEBIAN_FRONTEND=noninteractive HOME="/root" TERM=xterm LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+ENV	HOME /root
+ENV	LANG en_US.UTF-8
+ENV	LC_ALL en_US.UTF-8
+ENV	DEBIAN_FRONTEND	noninteractive
 
 # Set the locale
 RUN locale-gen en_US.UTF-8
@@ -31,11 +34,21 @@ RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 RUN apt-get install -qy wget build-essential
 
 # Install Oracle Java 8, accept license command is required for non interactive mode
-RUN	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886 && \
-	add-apt-repository -y ppa:webupd8team/java && \
-	apt-get update && \
-	echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections &&\
-	apt-get install -y oracle-java8-installer
+RUN apt-get -y update \
+	&& apt-get -y install software-properties-common python-software-properties \
+	&& add-apt-repository ppa:webupd8team/java \
+	&& apt-get clean \
+	&& apt-get -y update \
+    && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
+    && apt-get -y install oracle-java8-installer \
+    && apt-get clean \
+    && update-alternatives --display java \
+    && rm -rf /build \
+    && rm -rf /tmp/* /var/tmp/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get remove -y x11-common software-properties-common python-software-properties python3-software-properties
+
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 # Elasticsearch installation
 # Start Elasticsearch by /elasticsearch/bin/elasticsearch. This will run on port 9200.
@@ -53,7 +66,8 @@ RUN wget https://download.elastic.co/logstash/logstash/logstash-2.1.1.tar.gz && 
 	rm logstash-2.1.1.tar.gz && \
 	mv logstash-2.1.1 logstash
 
-ADD config/logstash/logstash.conf /config/logstash/logstash.conf
+RUN mkdir -p /config/logstash
+ADD logstash.conf /config/logstash/logstash.conf
 
 # Kibana installation
 RUN wget https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz && \
