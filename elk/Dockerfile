@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM phusion/baseimage:0.9.16
 MAINTAINER codechimp-org
 
 # Set correct environment variables
@@ -13,18 +13,32 @@ RUN usermod -u 99 nobody && \
 	usermod -d /home nobody && \
 	chown -R nobody:users /home
 
+#Enable SSH
+RUN rm -f /etc/service/sshd/down
+ 
+# Regenerate SSH host keys. baseimage-docker does not contain any, so you
+# have to do that yourself. You may also comment out this instruction; the
+# init system will auto-generate one during boot.
+RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+ 
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
+
 # Update Image
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 	
 # Install build dependencies
 RUN apt-get install -qy wget build-essential
 
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository -y ppa:webupd8team/java
+RUN apt-get update
+
 # Install Oracle Java 8, accept license command is required for non interactive mode
-RUN	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886 && \
-	add-apt-repository -y ppa:webupd8team/java && \
-	apt-get update && \
-	echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections &&\
-	apt-get install -y oracle-java8-installer
+RUN	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+
+RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+RUN apt-get install -y oracle-java8-installer
 
 # Elasticsearch installation
 # Start Elasticsearch by /elasticsearch/bin/elasticsearch. This will run on port 9200.
@@ -42,7 +56,8 @@ RUN wget https://download.elastic.co/logstash/logstash/logstash-2.1.1.tar.gz && 
 	rm logstash-2.1.1.tar.gz && \
 	mv logstash-2.1.1 logstash
 
-ADD config/logstash/logstash.conf /config/logstash/logstash.conf
+RUN mkdir -p /config/logstash
+ADD logstash.conf /config/logstash/logstash.conf
 
 # Kibana installation
 RUN wget https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz && \
