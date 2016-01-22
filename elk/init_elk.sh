@@ -19,3 +19,5 @@ if [ ! -d "/config/kibana/" ]; then
   mkdir -p /config/kibana
   chown -R nobody:users /config/kibana
 fi
+
+chmod -R 0777 /config/logstash
