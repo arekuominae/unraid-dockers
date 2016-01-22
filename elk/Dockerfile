@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.16
+FROM ubuntu:trusty
 MAINTAINER codechimp-org
 
 # Set correct environment variables
