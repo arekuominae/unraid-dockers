@@ -24,20 +24,16 @@ RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
-# Update Image
-RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
+#Install Java
+ENV CA_CERTIFICATES_JAVA_VERSION 20140324 
+RUN add-apt-repository -y ppa:openjdk-r/ppa RUN set -x \
+  && apt-get update && apt-get install -y --no-install-recommends \
+      libfontconfig1 \
+      openjdk-8-jre-headless \
+      ca-certificates-java
 
-# Install build dependencies
-RUN apt-get install -qy wget build-essential
-
-# Install Open Java 8
-RUN apt-get install openjdk-8-jre-headless -y && \ 
-apt-get install locales -y && \ 
-update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \ 
-locale-gen en_US.UTF-8 && \ 
-dpkg-reconfigure locales && \ 
-apt-get clean all && \ 
-rm -rf /var/lib/apt/lists/*
+# see CA_CERTIFICATES_JAVA_VERSION notes above # debug
+RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 #Set environment variable
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
