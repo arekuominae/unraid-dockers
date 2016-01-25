@@ -51,8 +51,8 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
 RUN wget https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz && \
 	tar xf elasticsearch-2.1.1.tar.gz && \
 	rm elasticsearch-2.1.1.tar.gz && \
-	mv elasticsearch-2.1.1 elasticsearch 
-	chown -R nobody:users /elasticsearch
+	mv elasticsearch-2.1.1 elasticsearch && \
+	chown -R nobody:users /elasticsearch && \
 	chmod -R 0777 /elasticsearch
 
 ADD elasticsearch.yml /elasticsearch/config/
