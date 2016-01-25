@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:latest
 MAINTAINER codechimp-org
 
 # Set correct environment variables
@@ -14,7 +14,7 @@ RUN usermod -u 99 nobody && \
 	chown -R nobody:users /home
 
 #Enable SSH
-RUN rm -f /etc/service/sshd/down
+RUN rm -rf /etc/service/sshd
  
 # Regenerate SSH host keys. baseimage-docker does not contain any, so you
 # have to do that yourself. You may also comment out this instruction; the
@@ -30,15 +30,20 @@ RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 # Install build dependencies
 RUN apt-get install -qy wget build-essential
 
-RUN apt-get install -y software-properties-common
-RUN add-apt-repository -y ppa:webupd8team/java
-RUN apt-get update
+# Install Java. 
+RUN \
+ echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \ 
+ add-apt-repository -y ppa:webupd8team/java && \ 
+ apt-get update && \ 
+ apt-get install -y oracle-java8-installer && \ 
+ rm -rf /var/lib/apt/lists/* && \ 
+ rm -rf /var/cache/oracle-jdk8-installer 
 
-# Install Oracle Java 8, accept license command is required for non interactive mode
-RUN	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+# Define commonly used JAVA_HOME variable 
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle 
 
-RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-RUN apt-get install -y oracle-java8-installer
+# Clean up APT when done. 
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Elasticsearch installation
 # Start Elasticsearch by /elasticsearch/bin/elasticsearch. This will run on port 9200.
