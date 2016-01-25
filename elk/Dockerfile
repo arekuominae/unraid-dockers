@@ -24,6 +24,12 @@ RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
+# Update Image
+RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
+
+# Install build dependencies
+RUN apt-get install -qy wget build-essential
+
 #Install Java
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324 
 RUN add-apt-repository -y ppa:openjdk-r/ppa 
