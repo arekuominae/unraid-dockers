@@ -42,9 +42,6 @@ RUN \
 # Define commonly used JAVA_HOME variable 
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle 
 
-# Clean up APT when done. 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 # Elasticsearch installation
 # Start Elasticsearch by /elasticsearch/bin/elasticsearch. This will run on port 9200.
 RUN wget https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/elasticsearch-2.1.1.tar.gz && \
@@ -52,7 +49,7 @@ RUN wget https://download.elasticsearch.org/elasticsearch/release/org/elasticsea
 	rm elasticsearch-2.1.1.tar.gz && \
 	mv elasticsearch-2.1.1 elasticsearch 
 
-ADD elasticsearch.yml /elasticsearch/config/elasticsearch.yml	
+ADD elasticsearch.yml /elasticsearch/config/
 
 # Logstash installation
 # Create a logstash.conf and start logstash by /logstash/bin/logstash agent -f logstash.conf
@@ -62,7 +59,7 @@ RUN wget https://download.elastic.co/logstash/logstash/logstash-2.1.1.tar.gz && 
 	mv logstash-2.1.1 logstash
 
 RUN mkdir -p /config/logstash
-ADD logstash.conf /config/logstash/logstash.conf
+ADD logstash.conf /config/logstash/
 
 # Kibana installation
 RUN wget https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz && \
@@ -77,14 +74,9 @@ RUN apt-get update && \
 # Clean up
 RUN apt-get purge -qq wget build-essential automake && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Pre-Initialize elk
-ADD pre_init_elk.sh /home/pre_init_elk.sh
-RUN chmod +x /home/pre_init_elk.sh
-RUN /home/pre_init_elk.sh
-
 # Initialize elk on boot
 RUN mkdir -p /etc/my_init.d
-ADD init_elk.sh /etc/my_init.d/init_elk.sh
+ADD init_elk.sh /etc/my_init.d/
 RUN chmod +x /etc/my_init.d/init_elk.sh
 
 #Start elk when container starts
