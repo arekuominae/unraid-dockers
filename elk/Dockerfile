@@ -30,6 +30,7 @@ RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 # Install build dependencies
 RUN apt-get install -qy wget build-essential
 
+# Install Open Java 8
 RUN apt-get install openjdk-8-jre-headless -y && \ 
 apt-get install locales -y && \ 
 update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX && \ 
@@ -38,6 +39,7 @@ dpkg-reconfigure locales && \
 apt-get clean all && \ 
 rm -rf /var/lib/apt/lists/*
 
+#Set environment variable
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
 
 # Elasticsearch installation
