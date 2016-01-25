@@ -20,4 +20,4 @@ if [ ! -d "/config/kibana/" ]; then
   chown -R nobody:users /config/kibana
 fi
 
-chmod -R 0777 /config/logstash
+chmod -R 0777 /config
