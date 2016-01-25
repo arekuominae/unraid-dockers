@@ -26,8 +26,10 @@ CMD ["/sbin/my_init"]
 
 #Install Java
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324 
-RUN add-apt-repository -y ppa:openjdk-r/ppa RUN set -x \
-  && apt-get update && apt-get install -y --no-install-recommends \
+RUN add-apt-repository -y ppa:openjdk-r/ppa 
+RUN set -x  && \
+ apt-get update && \
+ apt-get install -y --no-install-recommends \
       libfontconfig1 \
       openjdk-8-jre-headless \
       ca-certificates-java
