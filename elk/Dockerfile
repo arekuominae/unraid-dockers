@@ -62,16 +62,22 @@ ADD elasticsearch.yml /elasticsearch/config/
 RUN wget https://download.elastic.co/logstash/logstash/logstash-2.1.1.tar.gz && \
 	tar xf logstash-2.1.1.tar.gz && \
 	rm logstash-2.1.1.tar.gz && \
-	mv logstash-2.1.1 logstash
+	mv logstash-2.1.1 logstash && \
+	chown -R nobody:users /logstash && \
+	chmod -R 0777 /logstash
 
-RUN mkdir -p /config/logstash
+RUN mkdir -p /config/logstash && \
+	chown -R nobody:users /config && \
+	chmod -R 0777 /config
 ADD logstash.conf /config/logstash/
 
 # Kibana installation
 RUN wget https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz && \
  	mkdir -p kibana && \
 	tar -zx --strip-components=1 -C kibana -f kibana-4.3.1-linux-x64.tar.gz  && \
-	rm kibana-4.3.1-linux-x64.tar.gz 
+	rm kibana-4.3.1-linux-x64.tar.gz && \
+	chown -R nobody:users /kibana && \
+	chmod -R 0777 /kibana
 
 # Install curl utility just for testing
 RUN apt-get update && \
