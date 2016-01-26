@@ -36,7 +36,11 @@ VOLUME ["/config"]
 
 # Exposed Ports 
 # 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog udp input
-EXPOSE 5601 9200 3333 3334 514
+EXPOSE 5601 
+EXPOSE 9200
+EXPOSE 3333 
+EXPOSE 3334 
+EXPOSE 514/udp
 
 #Install Java
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324 
