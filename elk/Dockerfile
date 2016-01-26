@@ -35,7 +35,7 @@ RUN apt-get install -qy wget build-essential
 VOLUME ["/config"]
 
 # Exposed Ports 
-# 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog utp input
+# 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog udp input
 EXPOSE 5601 9200 3333 3334 514
 
 #Install Java
@@ -87,6 +87,8 @@ RUN wget https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz
 	chown -R nobody:users /kibana && \
 	chmod -R 0777 /kibana
 
+ADD kibana.yml /kibana/config/
+
 # Install curl utility just for testing
 RUN apt-get update && \
 	apt-get install -y curl
@@ -109,7 +111,7 @@ RUN mkdir -p /etc/service/kibana
 ADD kibana.sh /etc/service/kibana/run
 RUN chmod +x /etc/service/kibana/run
 
-#Start kibana when container starts
+#Start logstash when container starts
 RUN mkdir -p /etc/service/logstash
 ADD logstash.sh /etc/service/logstash/run
 RUN chmod +x /etc/service/logstash/run
