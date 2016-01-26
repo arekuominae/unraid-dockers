@@ -30,6 +30,14 @@ RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 # Install build dependencies
 RUN apt-get install -qy wget build-essential
 
+
+# Volumes
+VOLUME ["/config"]
+
+# Exposed Ports 
+# 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog utp input
+EXPOSE 5601 9200 3333 3334 514
+
 #Install Java
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324 
 RUN add-apt-repository -y ppa:openjdk-r/ppa 
@@ -91,13 +99,17 @@ RUN mkdir -p /etc/my_init.d
 ADD init_elk.sh /etc/my_init.d/
 RUN chmod +x /etc/my_init.d/init_elk.sh
 
-#Start elk when container starts
-RUN mkdir -p /etc/service/elk
-ADD elk.sh /etc/service/elk/run
-RUN chmod +x /etc/service/elk/run
+#Start elastic when container starts
+RUN mkdir -p /etc/service/elastic
+ADD elastic.sh /etc/service/elastic/run
+RUN chmod +x /etc/service/elastic/run
 
+#Start kibana when container starts
+RUN mkdir -p /etc/service/kibana
+ADD kibana.sh /etc/service/kibana/run
+RUN chmod +x /etc/service/kibana/run
 
-VOLUME /config
-
-# 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog utp input
-EXPOSE 5601 9200 3333 3334 514
+#Start kibana when container starts
+RUN mkdir -p /etc/service/logstash
+ADD logstash.sh /etc/service/logstash/run
+RUN chmod +x /etc/service/logstash/run
