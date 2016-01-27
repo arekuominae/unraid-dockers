@@ -1,3 +1,5 @@
+http.cors.allow-origin: "/.*/"
+http.cors.enabled: true
+cluster.name: elasticsearch
 path.logs: /config/elastic/log
 path.data: /config/elastic/data
-
