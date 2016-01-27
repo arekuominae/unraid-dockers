@@ -21,6 +21,6 @@ if [ ! -d "/config/kibana/" ]; then
 fi
 
 # Move the default conf file (if not exists)
-mv -n /root/logstash.conf /config/logstash/
+mv -n /tmp/logstash.conf /config/logstash/
 
 chmod -R 0777 /config
