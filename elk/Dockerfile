@@ -25,18 +25,6 @@ RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 # Install build dependencies
 RUN apt-get install -qy wget build-essential
 
-
-# Volumes
-VOLUME ["/config"]
-
-# Exposed Ports 
-# 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog udp input
-EXPOSE 5601 
-EXPOSE 9200
-EXPOSE 3333 
-EXPOSE 3334 
-EXPOSE 514/udp
-
 #Install Java
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324 
 RUN add-apt-repository -y ppa:openjdk-r/ppa 
@@ -112,3 +100,15 @@ RUN chmod +x /etc/service/kibana/run
 RUN mkdir -p /etc/service/logstash
 ADD logstash.sh /etc/service/logstash/run
 RUN chmod +x /etc/service/logstash/run
+
+# Volumes
+VOLUME ["/config"]
+
+# Exposed Ports 
+# 5601=kibana, 9200=elasticsearch, 3333,3334=logstash tcp input, 514=logstash syslog udp input
+EXPOSE 5601 
+EXPOSE 9200
+EXPOSE 3333 
+EXPOSE 3334 
+EXPOSE 514/udp
+

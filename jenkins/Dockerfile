@@ -25,10 +25,6 @@ RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 # Install build dependencies
 RUN apt-get install -qy wget build-essential
 
-
-# Volumes
-VOLUME ["/config"]
-
 #Install Java
 ENV CA_CERTIFICATES_JAVA_VERSION 20140324 
 RUN add-apt-repository -y ppa:openjdk-r/ppa 
@@ -36,14 +32,14 @@ RUN set -x  && \
  apt-get update && \
  apt-get install -y --no-install-recommends \
       libfontconfig1 \
-      openjdk-8-jre-headless \
+      openjdk-7-jre-headless \
       ca-certificates-java
 
 # see CA_CERTIFICATES_JAVA_VERSION notes above # debug
 RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 #Set environment variable
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
+ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/jre
 
 #Install Jenkins
 RUN apt-get install -y jenkins
@@ -62,3 +58,10 @@ RUN chmod +x /etc/my_init.d/init_jenkins.sh
 RUN mkdir -p /etc/service/jenkins
 ADD jenkins.sh /etc/service/jenkins/run
 RUN chmod +x /etc/service/jenkins/run
+
+# Volumes
+VOLUME ["/config"]
+
+# Exposed Ports 
+# 8090 Jenkins
+EXPOSE 8090
