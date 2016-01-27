@@ -78,10 +78,8 @@ RUN wget https://download.elastic.co/logstash/logstash/logstash-2.1.1.tar.gz && 
 	chown -R nobody:users /logstash && \
 	chmod -R 0777 /logstash
 
-RUN mkdir -p /config/logstash && \
-	chown -R nobody:users /config && \
-	chmod -R 0777 /config
-ADD logstash.conf /config/logstash/
+# Add default logstash conf, we'll move it to the /config volume in init_elk.sh
+ADD logstash.conf /root
 
 # Kibana installation
 RUN wget https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz && \
