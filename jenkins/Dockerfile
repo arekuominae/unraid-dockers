@@ -46,8 +46,8 @@ RUN wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key
 RUN sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
 RUN apt-get update && \
  apt-get install -y jenkins && \
- chown -R nobody:users /usr/share/java/jenkins/ /var/cache/jenkins/ && \
- chmod -R 775 /usr/share/java/jenkins/ /var/cache/jenkins/ && \
+ chown -R nobody:users /usr/share/java/ /var/cache/jenkins/ && \
+ chmod -R 775 /usr/share/java/ /var/cache/jenkins/ && \
  apt-get purge -qq wget build-essential automake && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Initialize jenkins on boot
