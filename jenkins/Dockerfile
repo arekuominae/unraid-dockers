@@ -1,4 +1,4 @@
-FROM phusion/baseimage:latest
+FROM phusion/baseimage:0.9.18
 MAINTAINER codechimp-org
 
 # Set correct environment variables
