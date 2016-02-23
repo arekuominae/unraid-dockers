@@ -28,8 +28,8 @@ RUN apt-add-repository ppa:vbernat/haproxy-1.6 && \
     apt-get install -qy haproxy curl wget vim nano vim-haproxy && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    chown -R nobody:users /haproxy && \
-	chmod -R 0777 /haproxy
+    chown -R nobody:users /usr/sbin/haproxy && \
+	chmod -R 0777 /usr/sbin/haproxy
 
 # Add default cnf, we'll move it to the /config volume in init_haproxy.sh
 ADD haproxy.cnf /root/
