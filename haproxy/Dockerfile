@@ -32,7 +32,7 @@ RUN apt-add-repository ppa:vbernat/haproxy-1.6 && \
 	chmod -R 0777 /usr/sbin/haproxy
 
 # Add default cnf, we'll move it to the /config volume in init_haproxy.sh
-ADD haproxy.cnf /root/
+ADD haproxy.cfg /root/
 
 # Initialize haproxy on boot
 RUN mkdir -p /etc/my_init.d
@@ -48,4 +48,4 @@ RUN chmod +x /etc/service/haproxy/run
 VOLUME ["/config"]
 
 # Exposed Ports 
-EXPOSE 80
+EXPOSE 8080
