@@ -1,0 +1,18 @@
+global
+    daemon
+    maxconn 256
+
+defaults
+    mode http
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
+
+frontend http-in
+    bind *:80
+    acl is_transmission hdr(host) -i transmission.mydomain.com
+    use_backend transmission if is_transmission
+    default_backend servers
+
+backend transmission
+    server server1 192.168.1.142:8181 maxconn 32
