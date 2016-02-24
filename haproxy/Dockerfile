@@ -22,7 +22,7 @@ CMD ["/sbin/my_init"]
 # Update Image
 RUN apt-get update && apt-get install -y libssl1.0.0 libpcre3 --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-RUN apt-add-repository ppa:vbernat/haproxy-1.6 && \
+RUN apt-add-repository ppa:vbernat/haproxy-1.5 && \
     apt-get -q update && \
     apt-get upgrade -qy -o Dpkg::Options::="--force-confold" && \
     apt-get install -qy haproxy curl wget vim nano vim-haproxy && \
