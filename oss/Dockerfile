@@ -58,7 +58,6 @@ RUN chmod +x /etc/my_init.d/init_oss.sh
 RUN mkdir -p /etc/service/oss
 ADD oss.sh /etc/service/oss/run
 RUN chmod +x /etc/service/oss/run
-RUN tail -F /var/log/opensearchserver/server.out
 
 # Volumes
 VOLUME ["/config"]
